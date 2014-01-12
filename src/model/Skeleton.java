@@ -61,23 +61,31 @@ public class Skeleton extends Neure {
 	@Override
 	public void stimulated(Neure neure, boolean flag) {
 		trim();
-		RGBUtil.genImg("111" + Integer.toHexString(this.rgb), trimSet, trimWidth,trimHeight);
+		RGBUtil.genImg("sk" + Integer.toHexString(this.rgb), trimSet, trimWidth,trimHeight);
 		for (Neure n : frontSet) {
 			n.stimulated(this, true);
 		}
 	}
-	private void trim(){
+	public Set<Pixel> trim(int x,int y,int maxX,int maxY){
 		trimSet = new HashSet<>();
-		this.trimWidth=maxWidth - minWitdh+1;
-		this.trimHeight=maxHeight - minHeight+1;
-		for (int i = minWitdh; i <= maxWidth; i++) {
-			for (int j = minHeight; j <= maxHeight; j++) {
+		int minX=minWitdh>x?minWitdh:x;
+		int minY=minHeight>y?minHeight:y;
+		maxX=maxWidth>maxX?maxX:maxWidth;
+		maxY=maxHeight>maxY?maxY:maxHeight;
+		this.trimWidth=maxX - minX+1;
+		this.trimHeight=maxY - minY+1;
+		for (int i = minX; i <= maxX; i++) {
+			for (int j = minY; j <= maxY; j++) {
 				Pixel pix = pixArr[i][j];
 				if (pix != null) {
-					trimSet.add(new Pixel(pix.getX() - minWitdh, pix.getY() - minHeight, pix.getRgb()));
+					trimSet.add(new Pixel(pix.getX() - minX, pix.getY() - minY, pix.getRgb()));
 				}
 			}
 		}
+		return trimSet;
+	}
+	public Set<Pixel> trim(){
+		return this.trim(minWitdh,minHeight,maxWidth,maxHeight);
 	}
 	
 	public int getTrimWidth() {
@@ -100,7 +108,6 @@ public class Skeleton extends Neure {
 	}
 
 	public Set<Pixel> getTrimSet() {
-		trim();
 		return trimSet;
 	}
 	@Override

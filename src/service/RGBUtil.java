@@ -3,23 +3,94 @@ package service;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Transparency;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageOutputStream;
 
 import model.Pixel;
 
 public class RGBUtil {
+
 	public static String imageDir = "C:/Users/Administrator/Desktop/img";
-	
-	public static void trimImg(Collection<Pixel> pixels, int width, int height) {
-		
-		
+
+	public static BufferedImage rotateImg(BufferedImage image, int degree) throws IOException {
+		BufferedImage rotatedImage = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+		Graphics2D gs = (Graphics2D) rotatedImage.getGraphics();
+		gs.rotate(Math.toRadians(degree), image.getWidth() >> 1, image
+			     .getHeight() >> 1); 
+		gs.drawImage(rotatedImage, 0, 0, null);
+		 return rotatedImage;
+//		int iw = image.getWidth();// 原始图象的宽度
+//		int ih = image.getHeight();// 原始图象的高度
+//		int w = 0;
+//		int h = 0;
+//		int x = 0;
+//		int y = 0;
+//		degree = degree % 360;
+//		if (degree < 0)
+//			degree = 360 + degree;// 将角度转换到0-360度之间
+//		double ang = Math.toRadians(degree);// 将角度转为弧度
+//		/**
+//		 * 确定旋转后的图象的高度和宽度
+//		 */
+//		if (degree == 180 || degree == 0 || degree == 360) {
+//			w = iw;
+//			h = ih;
+//		} else if (degree == 90 || degree == 270) {
+//			w = ih;
+//			h = iw;
+//		} else {
+//			int d = iw + ih;
+//			w = (int) (d * Math.abs(Math.cos(ang)));
+//			h = (int) (d * Math.abs(Math.sin(ang)));
+//		}
+//		x = (w / 2) - (iw / 2);// 确定原点坐标
+//		y = (h / 2) - (ih / 2);
+//		BufferedImage rotatedImage = new BufferedImage(w, h, image.getType());
+//		Graphics2D gs = (Graphics2D) rotatedImage.getGraphics();
+////		if (bgcolor == null) {
+////			rotatedImage = gs.getDeviceConfiguration().createCompatibleImage(w, h, Transparency.TRANSLUCENT);
+////		} else {
+//			gs.setColor(Color.WHITE);
+//			gs.fillRect(0, 0, w, h);// 以给定颜色绘制旋转后图片的背景
+////		}
+//		AffineTransform at = new AffineTransform();
+//		at.rotate(ang, w / 2, h / 2);// 旋转图象
+//		at.translate(x, y);
+//		AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
+//		op.filter(image, rotatedImage);
+//		return rotatedImage;
+////		image = rotatedImage;
+////		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+////		ImageOutputStream iamgeOut = ImageIO.createImageOutputStream(byteOut);
+////		ImageIO.write(image, "png", iamgeOut);
+////		InputStream inputStream = new ByteArrayInputStream(byteOut.toByteArray());
+////		return inputStream;
 	}
-		public static void genImg(String name, Collection<Pixel> pixels, int width, int height) {
+
+	public static void genImg(String name, BufferedImage bi) {
+		File file = new File(imageDir + "/" + name + ".jpg");
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		try {
+			ImageIO.write(bi, "jpg", file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void genImg(String name, Collection<Pixel> pixels, int width, int height) {
 		File file = new File(imageDir + "/" + name + ".jpg");
 		if (!file.exists()) {
 			file.mkdirs();
@@ -38,6 +109,7 @@ public class RGBUtil {
 			e.printStackTrace();
 		}
 	}
+
 	public static double getDistance(int rbg1, int rbg2) {
 		LAB lab1 = new LAB(rbg1);
 		LAB lab2 = new LAB(rbg2);
@@ -113,20 +185,23 @@ public class RGBUtil {
 			b = 200 * (Math.pow(y, 1.0 / 3.0) - Math.pow(z, 1.0 / 3.0));
 		}
 	}
-//	private static int getMixRbg(int rgb1, int rgb2, Double rate1, Double rate2) {
-//		RGB rgb11=new RGB(rgb1);
-//		RGB rgb22=new RGB(rgb2);
-//		int r = new Double((rgb11.r * rate1 + getR(rgb2) * rate2) / (rate1 + rate2)).intValue();
-//		int g = new Double((getG(rgb1) * rate1 + getG(rgb2) * rate2) / (rate1 + rate2)).intValue();
-//		int b = new Double((getB(rgb1) * rate1 + getB(rgb2) * rate2) / (rate1 + rate2)).intValue();
-//		return (r << 16) + (g << 8) + b;
-//	}
-//
-//	private static int getDistance1(int rgb1, int rgb2) {
-//		int r = rgb1 >> 16 - rgb2 >> 16;
-//		int g = (rgb1 & 0x00FF00) >> 8 - (rgb2 & 0x00FF00) >> 8;
-//		int b = rgb1 & 0x0000FF - rgb2 & 0x0000FF;
-//		return r * r + g * g + b * b;
-//	}
-
+	// private static int getMixRbg(int rgb1, int rgb2, Double rate1, Double
+	// rate2) {
+	// RGB rgb11=new RGB(rgb1);
+	// RGB rgb22=new RGB(rgb2);
+	// int r = new Double((rgb11.r * rate1 + getR(rgb2) * rate2) / (rate1 +
+	// rate2)).intValue();
+	// int g = new Double((getG(rgb1) * rate1 + getG(rgb2) * rate2) / (rate1 +
+	// rate2)).intValue();
+	// int b = new Double((getB(rgb1) * rate1 + getB(rgb2) * rate2) / (rate1 +
+	// rate2)).intValue();
+	// return (r << 16) + (g << 8) + b;
+	// }
+	//
+	// private static int getDistance1(int rgb1, int rgb2) {
+	// int r = rgb1 >> 16 - rgb2 >> 16;
+	// int g = (rgb1 & 0x00FF00) >> 8 - (rgb2 & 0x00FF00) >> 8;
+	// int b = rgb1 & 0x0000FF - rgb2 & 0x0000FF;
+	// return r * r + g * g + b * b;
+	// }
 }

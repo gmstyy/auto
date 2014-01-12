@@ -2,18 +2,21 @@
 package service;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
@@ -31,14 +34,9 @@ public class run {
 	public static void main(String[] args) {
 		try {
 			delFolder(RGBUtil.imageDir);
-			File recFile = new File("C:\\Users\\Administrator\\Desktop\\p2.jpg");
-			BufferedImage recImg= ImageIO.read(recFile);
-			Recognition recNeure=new Recognition(recImg);
-			
-			File file = new File("C:\\Users\\Administrator\\Desktop\\p.png");
+			Set<Neure> recNeure = initRec();
+			File file = new File("C:\\Users\\Administrator\\Desktop\\p2.jpg");
 			BufferedImage bufImg= ImageIO.read(file);
-			HashSet<Neure> recNuSet=new HashSet<>();
-			recNuSet.add(recNeure);
 			int height = bufImg.getHeight();
 			int width = bufImg.getWidth();
 			Map<Integer, Skeleton> colorMap = new TreeMap<>();
@@ -50,7 +48,7 @@ public class run {
 						continue;
 					}
 					Skeleton newSk=new Skeleton(rgb, width, height);
-					newSk.setFrontSet(recNuSet);
+					newSk.setFrontSet(recNeure);
 					newSk.addPix(new Pixel(i, j, rgb));
 					colorMap.put(rgb, newSk);
 					// System.out.println(bufImg.getRGB(i, j) & 0xFFFFFF);
@@ -75,7 +73,7 @@ public class run {
 				}
 				for (Integer color : newMap.keySet()) {
 					double distance = RGBUtil.getDistance(sk1.getRgb(), color);
-					if (distance <= 7) {
+					if (distance <= 30) {
 						Skeleton tmp=newMap.get(color);
 						tmp.addAllPix(sk1.getPixSet());
 						continue out;
@@ -93,6 +91,29 @@ public class run {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static Set<Neure> initRec() throws IOException {
+		BufferedImage bi = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2 = (Graphics2D) bi.getGraphics();
+		g2.setBackground(new Color(0xFFFFFF));
+		g2.clearRect(0, 0, 100, 100);
+//		// 设置大字体
+		Font font = new Font("楷体", Font.ITALIC | Font.BOLD,60);
+		g2.setFont(font);
+		g2.setColor(Color.BLACK);
+		g2.drawString("p", 30, 30);
+		RGBUtil.genImg("font",bi);
+		Set<Neure> recList=new HashSet<>();
+//		File recFile = new File("C:\\Users\\Administrator\\Desktop\\p2.jpg");
+//		BufferedImage recImg= ImageIO.read(recFile);
+		Recognition recNeure=new Recognition(bi,"p");
+		recList.add(recNeure);
+		BufferedImage bi1=RGBUtil.rotateImg(bi, 15);
+		recList.add(new Recognition(bi1,"p1"));
+		BufferedImage bi2=RGBUtil.rotateImg(bi, 30);
+		recList.add(new Recognition(bi2,"p2"));
+		return recList;
 	}
 
 	private void train() {
