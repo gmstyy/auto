@@ -94,7 +94,7 @@ public class run {
 	}
 
 	private static Set<Neure> initRec() throws IOException {
-		BufferedImage bi = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(50,50, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2 = (Graphics2D) bi.getGraphics();
 		g2.setBackground(new Color(0xFFFFFF));
 		g2.clearRect(0, 0, 100, 100);
@@ -102,16 +102,16 @@ public class run {
 		Font font = new Font("楷体", Font.ITALIC | Font.BOLD,60);
 		g2.setFont(font);
 		g2.setColor(Color.BLACK);
-		g2.drawString("p", 30, 30);
+		g2.drawString("p", 0, 30);
 		RGBUtil.genImg("font",bi);
 		Set<Neure> recList=new HashSet<>();
 //		File recFile = new File("C:\\Users\\Administrator\\Desktop\\p2.jpg");
 //		BufferedImage recImg= ImageIO.read(recFile);
 		Recognition recNeure=new Recognition(bi,"p");
 		recList.add(recNeure);
-		BufferedImage bi1=RGBUtil.rotateImg(bi, 15);
+		BufferedImage bi1=RGBUtil.rotateImg(bi, 20);
 		recList.add(new Recognition(bi1,"p1"));
-		BufferedImage bi2=RGBUtil.rotateImg(bi, 30);
+		BufferedImage bi2=RGBUtil.rotateImg(bi, -30);
 		recList.add(new Recognition(bi2,"p2"));
 		return recList;
 	}

@@ -49,34 +49,6 @@ public class Recognition extends Neure {
 		}
 		RGBUtil.genImg("ok-"+value, okMap.keySet(), okMap.getWidth(), okMap.height);
 		RGBUtil.genImg("pass-"+value, passMap.keySet(), passMap.width, passMap.height);
-//		int[][] imagePix = new int[width][height];
-//		int minWitdh = width, maxWidth = 0, minHeight = height, maxheight = 0;
-//		for (int i = 0; i < width; i++) {
-//			for (int j = 0; j < height; j++) {
-//				int rgb = model.getRGB(i, j) & 0xFFFFFF;
-//				if (rgb != 0xFFFFFF) {
-//					imagePix[i][j] = rgb;
-//					minWitdh = minWitdh > i ? i : minWitdh;
-//					maxWidth = maxWidth > i ? maxWidth : i;
-//					minHeight = minHeight > j ? j : minHeight;
-//					maxheight = maxheight > j ? maxheight : j;
-//				} else {
-//					imagePix[i][j] = 0;
-//				}
-//			}
-//		}
-//		this.width = maxWidth - minWitdh + 1;
-//		this.height = maxheight - minHeight + 1;
-//		for (int i = minWitdh; i <= maxWidth; i++) {
-//			for (int j = minHeight; j <= maxheight; j++) {
-//				if (imagePix[i][j] != 0) {
-//					okMap.put(new Pixel(i - minWitdh, j - minHeight, imagePix[i][j]), 1.0);
-//					continue;
-//				}
-//				passMap.put(new Pixel(i - minWitdh, j - minHeight, imagePix[i][j]), 1.0);
-//			}
-//		}
-		
 	}
 
 	@Override
