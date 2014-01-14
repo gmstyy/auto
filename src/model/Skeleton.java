@@ -73,7 +73,7 @@ public class Skeleton extends Neure {
 	@Override
 	public void stimulated(Neure neure, boolean flag) {
 		trim();
-		RGBUtil.genImg(name, trimSet, trimWidth, trimHeight);
+		RGBUtil.genImg(name, trimSet, width, height);
 		for (Neure n : frontSet) {
 			n.stimulated(this, true);
 		}

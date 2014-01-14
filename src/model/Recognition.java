@@ -44,7 +44,7 @@ public class Recognition extends Neure {
 			okMap.put(pix, 1.0);
 		}
 		for (Pixel pix : passSet) {
-			passMap.put(pix, 0.3);
+			passMap.put(pix, 0.7);
 		}
 		RGBUtil.genImg("ok-" + value, okMap.keySet(), okMap.getWidth(), okMap.height);
 		RGBUtil.genImg("pass-" + value, passMap.keySet(), passMap.width, passMap.height);
@@ -67,7 +67,7 @@ public class Recognition extends Neure {
 		}
 		score = okd - passd;
 		if (score >= threshold) {
-			System.out.println(sk.getName()+" "+value+" "+score);
+			System.out.println("  "+sk.getName()+" "+value+" "+score);
 			sk.getResultList().add(this);
 		}
 //		if (score >= threshold/2) {
