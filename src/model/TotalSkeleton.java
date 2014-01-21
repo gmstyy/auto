@@ -70,13 +70,17 @@ public class TotalSkeleton extends Skeleton {
 		for (PixGroup group : groupSet) {
 			if (new Double(group.size()) / this.getPixSet().size() > 0.1) {
 				Skeleton sk = new Skeleton(name + "-" + index++, this.width, this.height);
+				sk.setValue(value);
 				sk.addAllPix(group);
 				sk.setFrontSet(this.getFrontSet());
 				sk.stimulated(null, true);
 			}
 		}
 	}
-
+	@Override
+	public String toString() {
+		return name;
+	}
 	private class PixGroup extends HashSet<Pixel> {
 
 		Integer index;

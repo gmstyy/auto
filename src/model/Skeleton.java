@@ -9,13 +9,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import service.RGBUtil;
+import utils.RGBUtil;
 
 public class Skeleton extends Neure {
 
 	private List<Recognition> resultList = new ArrayList<>();
 	protected int rgb;
 	protected String name;
+	protected String value;
 	private Double rate;
 	protected int width, height, trimWidth, trimHeight;
 	protected Pixel[][] pixArr;
@@ -71,7 +72,7 @@ public class Skeleton extends Neure {
 	}
 
 	@Override
-	public void stimulated(Neure neure, boolean flag) {
+	public void stimulated(Neure neure, boolean enhance) {
 		trim();
 		RGBUtil.genImg(name, trimSet, width, height);
 		for (Neure n : frontSet) {
@@ -84,8 +85,7 @@ public class Skeleton extends Neure {
 				return new Double(o2.getScore()).compareTo(o1.getScore());
 			}
 		});
-		
-		System.out.println(name+" "+(resultList.size()>0?resultList.get(0).getValue()+"  "+resultList.get(0).getScore():"没有"));
+		System.out.println(name + " " + (resultList.size() > 0 ? resultList.get(0).getValue() + "  " + resultList.get(0).getScore() : "没有"));
 	}
 
 	public Set<Pixel> trim(int x, int y, int maxX, int maxY) {
@@ -132,7 +132,7 @@ public class Skeleton extends Neure {
 	}
 
 	@Override
-	public void feedback(Neure neure) {
+	public void feedback(Neure neure, boolean enhance) {
 		// TODO Auto-generated method stub
 	}
 
@@ -221,13 +221,19 @@ public class Skeleton extends Neure {
 		this.resultList = resultList;
 	}
 
-	
 	public String getName() {
 		return name;
 	}
 
-	
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }

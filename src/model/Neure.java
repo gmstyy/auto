@@ -3,11 +3,13 @@ package model;
 import java.util.Map;
 import java.util.Set;
 
+import Interface.Repository;
 
-public abstract class Neure {
+
+public abstract class Neure implements Repository{
 	
-	public abstract void stimulated(Neure neure,boolean flag);
-	public abstract void feedback(Neure neure);
+	public abstract void stimulated(Neure neure,boolean enhance);
+	public abstract void feedback(Neure neure,boolean enhance);
 	public abstract void complete();
 	protected Set<Neure> frontSet;
 	protected Map<Neure,Double> feedSet;
@@ -26,6 +28,14 @@ public abstract class Neure {
 	
 	public void setFeedSet(Map<Neure, Double> feedSet) {
 		this.feedSet = feedSet;
+	}
+	@Override
+	public void store() {
+		
+	}
+	@Override
+	public void load() {
+		
 	}
 	
 }

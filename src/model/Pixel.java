@@ -1,7 +1,8 @@
 package model;
 
 
-public class Pixel {
+
+public class Pixel{
 
 	private int x,y;
 	private int rgb;
@@ -12,7 +13,16 @@ public class Pixel {
 		this.y = y;
 		this.rgb = rgb;
 	}
-
+	public Pixel(String str) {
+		String[] arr=str.split(",");
+		if(arr.length>1){
+			this.x = Integer.parseInt(arr[0]);
+			this.y = Integer.parseInt(arr[1]);
+		}
+		if(arr.length>2){
+			this.rgb = Integer.parseInt(arr[2]);
+		}
+	}
 
 	public int getX() {
 		return x;
@@ -54,5 +64,9 @@ public class Pixel {
 	@Override
 	public int hashCode() {
 		return (new Integer(x)+"|"+new Integer(y)).hashCode();
+	}
+	@Override
+	public String toString() {
+		return x+","+y+","+rgb;
 	}
 }
